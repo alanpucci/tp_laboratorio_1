@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "utn_TP1.h"
+
+#include "utn.h"
 
 int main(void) {
 	setbuf(stdout, NULL);
@@ -24,7 +25,7 @@ int main(void) {
 			switch(opcionElegida)
 			{
 				case 1:
-					if(utn_getNumber("\nIngrese el primer numero: ", "\nERROR! Ingrese un numero valido: ", &numero1) == 0)
+					if(utn_getFloat("\nIngrese el primer numero: ", "\nERROR! Ingrese un numero valido: ", &numero1) == 0)
 					{
 						printf("\nTu primer numero es: %.2f\n", numero1);
 						utn_getOption("\nQue opcion desea ingresar? ", &opcionElegida);
@@ -32,7 +33,7 @@ int main(void) {
 					}
 				break;
 				case 2:
-					if(utn_getNumber("\nIngrese el segundo numero: ", "\nERROR! Ingrese un numero valido: ", &numero2) == 0)
+					if(utn_getFloat("\nIngrese el segundo numero: ", "\nERROR! Ingrese un numero valido: ", &numero2) == 0)
 					{
 						printf("\nTu segundo numero es: %.2f\n", numero2);
 						utn_getOption("\nQue opcion desea ingresar? ", &opcionElegida);

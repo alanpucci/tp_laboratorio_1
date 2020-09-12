@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 /**
  * \brief Menu de la calculadora, solicita un entero al usuario que representa la opcion elegida
  * \param char *msg: Es el mensaje a ser mostrado
@@ -15,27 +14,30 @@ int utn_getOption(char *msg, int *pNumero)
 	int respuestaScanf;
 	int bufferInt;
 	int retornar = -1;
-	printf("%s", msg);
-	printf("\n 1) Ingresar el primer operando."
-			"\n 2) Ingresar el segundo operando."
-			"\n 3) Calcular todas las operaciones."
-			"\n 4) Informar los resultados."
-			"\n 5) Salir.\n");
-	fflush(stdin);
-	respuestaScanf = scanf("%d", &bufferInt);
-	while(respuestaScanf == 0)
-	{
-		printf("ERROR, por favor ingrese una opcion valida:"
-					"\n 1) Ingresar el primer operando."
-					"\n 2) Ingresar el segundo operando."
-					"\n 3) Calcular todas las operaciones."
-					"\n 4) Informar los resultados."
-					"\n 5) Salir.\n");
+
+	if(msg!=NULL && pNumero!=NULL){
+		printf("%s", msg);
+		printf("\n 1) Ingresar el primer operando."
+				"\n 2) Ingresar el segundo operando."
+				"\n 3) Calcular todas las operaciones."
+				"\n 4) Informar los resultados."
+				"\n 5) Salir.\n");
 		fflush(stdin);
 		respuestaScanf = scanf("%d", &bufferInt);
+		while(respuestaScanf == 0)
+		{
+			printf("ERROR, por favor ingrese una opcion valida:"
+						"\n 1) Ingresar el primer operando."
+						"\n 2) Ingresar el segundo operando."
+						"\n 3) Calcular todas las operaciones."
+						"\n 4) Informar los resultados."
+						"\n 5) Salir.\n");
+			fflush(stdin);
+			respuestaScanf = scanf("%d", &bufferInt);
+		}
+		*pNumero = bufferInt;
+		retornar = 0;
 	}
-	*pNumero = bufferInt;
-	retornar = 0;
 	return retornar;
 }
 
@@ -46,23 +48,26 @@ int utn_getOption(char *msg, int *pNumero)
  * \param float *pNumero: Puntero que hace referencia al espacio en memoria del numero ingresado
  * \return -1 si algo salio mal, 0 si todo esta correcto
  */
-int utn_getNumber(char *msg, char *msgError, float *pNumero)
+int utn_getFloat(char *msg, char *msgError, float *pNumero)
 {
 	float bufferFloat;
 	int respuestaScanf;
 	int retornar = -1;
 
-	printf("%s", msg);
-	fflush(stdin);
-	respuestaScanf = scanf("%f", &bufferFloat);
-	while(respuestaScanf == 0)
+	if(msg!=NULL && msgError!=NULL && pNumero!=NULL)
 	{
-		printf("%s", msgError);
+		printf("%s", msg);
 		fflush(stdin);
 		respuestaScanf = scanf("%f", &bufferFloat);
+		while(respuestaScanf == 0)
+		{
+			printf("%s", msgError);
+			fflush(stdin);
+			respuestaScanf = scanf("%f", &bufferFloat);
+		}
+		*pNumero = bufferFloat;
+		retornar = 0;
 	}
-	*pNumero = bufferFloat;
-	retornar = 0;
 	return retornar;
 }
 
@@ -76,8 +81,11 @@ int utn_getNumber(char *msg, char *msgError, float *pNumero)
 int utn_suma(float *pResultado, float numero1, float numero2)
 {
 	int retornar = -1;
-	*pResultado = numero1 + numero2;
-	retornar = 0;
+	if(pResultado!=NULL)
+	{
+		*pResultado = numero1 + numero2;
+		retornar = 0;
+	}
 	return retornar;
 }
 
@@ -91,8 +99,11 @@ int utn_suma(float *pResultado, float numero1, float numero2)
 int utn_resta(float *pResultado, float numero1, float numero2)
 {
 	int retornar = -1;
-	*pResultado = numero1 - numero2;
-	retornar = 0;
+	if(pResultado!=NULL)
+	{
+		*pResultado = numero1 - numero2;
+		retornar = 0;
+	}
 	return retornar;
 }
 
@@ -106,8 +117,11 @@ int utn_resta(float *pResultado, float numero1, float numero2)
 int utn_multiplicacion(float *pResultado, float numero1, float numero2)
 {
 	int retornar = -1;
-	*pResultado = numero1 * numero2;
-	retornar = 0;
+	if(pResultado!=NULL)
+	{
+		*pResultado = numero1 * numero2;
+		retornar = 0;
+	}
 	return retornar;
 }
 
@@ -121,7 +135,7 @@ int utn_multiplicacion(float *pResultado, float numero1, float numero2)
 int utn_division(float *pResultado, float numero1, float numero2)
 {
 	int retornar = -1;
-	if(numero2 != 0)
+	if(numero2 != 0 && pResultado!=NULL)
 	{
 		*pResultado = numero1 / numero2;
 		retornar = 0;
@@ -140,7 +154,7 @@ int utn_factorial(int *pResultado, float numero)
 {
 	int retornar = -1;
 	int bufferInt = 1;
-	if(numero >= 0)
+	if(numero >= 0 && pResultado!=NULL)
 	{
 		for(int i = 1; i <= numero; i++)
 		{
@@ -232,21 +246,22 @@ int utn_operaciones(float numero1, float numero2, float *pResultadoSuma, float *
 	int resultadoFactorial2;
 	if(utn_suma(&resultadoSuma, numero1, numero2) == 0 &&
 	   utn_resta(&resultadoResta, numero1, numero2) == 0 &&
-	   utn_multiplicacion(&resultadoMultiplicacion, numero1, numero2) == 0)
+	   utn_multiplicacion(&resultadoMultiplicacion, numero1, numero2) == 0 &&
+	   pResultadoSuma!=NULL && pResultadoResta!=NULL && pResultadoMultiplicacion!=NULL)
 	{
 		*pResultadoSuma = resultadoSuma;
 		*pResultadoResta = resultadoResta;
 		*pResultadoMultiplicacion = resultadoMultiplicacion;
 	}
-	if(utn_division(&resultadoDivision, numero1, numero2) == 0)
+	if(utn_division(&resultadoDivision, numero1, numero2) == 0 && pResultadoDivision!=NULL)
 	{
 		*pResultadoDivision = resultadoDivision;
 	}
-	if(utn_factorial(&resultadoFactorial1, numero1) == 0)
+	if(utn_factorial(&resultadoFactorial1, numero1) == 0 && pResultadoFactorial1!=NULL)
 	{
 		*pResultadoFactorial1 = resultadoFactorial1;
 	}
-	if(utn_factorial(&resultadoFactorial2, numero2) == 0)
+	if(utn_factorial(&resultadoFactorial2, numero2) == 0 && pResultadoFactorial2!=NULL)
 	{
 		*pResultadoFactorial2 = resultadoFactorial2;
 	}
