@@ -41,15 +41,9 @@ int main(void) {
 				break;
 				case 3:
 					if(banderaPrimerNumero == 1 && banderaSegundoNumero == 1 &&
-						   (utn_suma(&resultadoSuma, numero1, numero2) == 0 &&
-							utn_resta(&resultadoResta, numero1, numero2) == 0 &&
-							utn_multiplicacion(&resultadoMultiplicacion, numero1, numero2) == 0))
+						utn_operaciones(numero1,numero2,&resultadoSuma,&resultadoResta,&resultadoMultiplicacion, &resultadoDivision, &resultadoFactorialNumero1,&resultadoFactorialNumero2) == 0)
 					{
-						printf("\nCalculo de la suma %.2f + %.2f", numero1, numero2);
-						printf("\nCalculo de la resta %.2f - %.2f", numero1, numero2);
-						printf("\nCalculo de la multiplicacion %.2f * %.2f", numero1, numero2);
-						printf("\nCalculo de la division %.2f / %.2f", numero1, numero2);
-						printf("\nCalculo del factorial de %.2f y %.2f\n", numero1, numero2);
+						utn_imprimirOperaciones(numero1, numero2);
 						banderaCalculo=1;
 					}
 					else
@@ -61,33 +55,7 @@ int main(void) {
 				case 4:
 					if(banderaPrimerNumero == 1 && banderaSegundoNumero == 1 && banderaCalculo == 1)
 					{
-						printf("\nEl resultado de %.2f + %.2f es: %.2f", numero1, numero2, resultadoSuma);
-						printf("\nEl resultado de %.2f - %.2f es: %.2f", numero1, numero2, resultadoResta);
-						printf("\nEl resultado de %.2f * %.2f es: %.2f", numero1, numero2, resultadoMultiplicacion);
-						if(utn_division(&resultadoDivision, numero1, numero2) == 0)
-						{
-							printf("\nEl resultado de %.2f / %.2f es: %.2f", numero1, numero2, resultadoDivision);
-						}
-						else
-						{
-							printf("\nNo se puede dividir por 0");
-						}
-						if(utn_factorial(&resultadoFactorialNumero1, numero1) == 0)
-						{
-							printf("\nEl factorial de %.2f es: %d", numero1, resultadoFactorialNumero1);
-						}
-						else
-						{
-							printf("\nNo se puede hacer el factorial de un numero negativo");
-						}
-						if(utn_factorial(&resultadoFactorialNumero2, numero2) == 0)
-						{
-							printf("\nEl factorial de %.2f es: %d\n", numero2, resultadoFactorialNumero2);
-						}
-						else
-						{
-							printf("\nNo se puede hacer el factorial de un numero negativo\n");
-						}
+						utn_imprimirResultados(numero1,numero2,resultadoSuma,resultadoResta,resultadoMultiplicacion, resultadoDivision, resultadoFactorialNumero1, resultadoFactorialNumero2);
 					}
 					else
 					{
@@ -102,4 +70,5 @@ int main(void) {
 		}
 		printf("\n\nAdios!!");
 	}
+	return EXIT_SUCCESS;
 }
