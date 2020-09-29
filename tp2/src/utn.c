@@ -6,7 +6,8 @@
 
 static int myGets(char cadena[], int longitud);
 static int isString(char cadena[]);
-static int isNumber(char cadena[]);
+static int isInt(char cadena[]);
+static int isFloat(char string[]);
 
 /*
  * utn_getNumero : Pide al usuario un numero
@@ -44,7 +45,31 @@ static int isString(char string[])
 	return retorno;
 }
 
-static int isNumber(char string[])
+static int isFloat(char string[])
+{
+	int retorno = 1;
+	int i = 0;
+
+	if(string != NULL && strlen(string) > 0)
+	{
+		if(string[0] == '-')
+		{
+			i = 1;
+		}
+
+		for( ; string[i] != '\0' ; i++)
+		{
+			if((string[i] > '9' || string[i] < '0') && string[i] != '.')
+			{
+				retorno = 0;
+				break;
+			}
+		}
+	}
+	return retorno;
+}
+
+static int isInt(char string[])
 {
 	int retorno = 1;
 	int i = 0;
@@ -105,7 +130,7 @@ int utn_getInt(char msg[], char msgError[], int *pResult, int attemps, int min, 
 		do
 		{
 			printf("%s", msg);
-			if(myGets(bufferString, ARRAY_SIZE) == 0 && isNumber(bufferString) == 1)
+			if(myGets(bufferString, ARRAY_SIZE) == 0 && isInt(bufferString) == 1)
 			{
 				bufferInt = atoi(bufferString);
 				if(bufferInt >= min && bufferInt<= max)
@@ -143,7 +168,7 @@ int utn_getFloat(char msg[], char msgError[], float *pResult, int attemps, int m
 		do
 		{
 			printf("%s", msg);
-			if(myGets(bufferString, ARRAY_SIZE) == 0 && isNumber(bufferString) == 1)
+			if(myGets(bufferString, ARRAY_SIZE) == 0 && isFloat(bufferString) == 1)
 			{
 				bufferFloat = atof(bufferString);
 				if(bufferFloat >= min && bufferFloat<= max)
@@ -181,7 +206,7 @@ int utn_getMenu(int *pResult, int attemps, int min, int max)
 		do
 		{
 			printf("\nElija una opcion:\n1)Dar de alta un empleado\n2)Modificar un empleado\n3)Dar de baja un empleado\n4)INFORMAR\n5)Salir");
-			if(myGets(bufferString, ARRAY_SIZE) == 0 && isNumber(bufferString) == 1)
+			if(myGets(bufferString, ARRAY_SIZE) == 0 && isInt(bufferString) == 1)
 			{
 				bufferInt = atoi(bufferString);
 				if(bufferInt >= min && bufferInt<= max)

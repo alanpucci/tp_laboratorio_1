@@ -1,17 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "arrayEmployees.h"
 #include "utn.h"
 
 int main(void) {
 	setbuf(stdout,NULL);
 	int menuOption;
-	int addEmployeeFlag = 1;
 	Employee arrayEmployees[EMPLOYEES_LEN];
-	//initEmployees(arrayEmployees, EMPLOYEES_LEN);
 	/*
+	initEmployees(arrayEmployees, EMPLOYEES_LEN);
 	arrayEmployees[0].id = 1;
 	strcpy(arrayEmployees[0].name, "Alan");
 	strcpy(arrayEmployees[0].lastName, "Pucci");
@@ -47,7 +45,7 @@ int main(void) {
 	arrayEmployees[4].sector = 2;
 	arrayEmployees[4].isEmpty = FALSE;
 	*/
-	if(initEmployees(arrayEmployees, EMPLOYEES_LEN)==0)
+	if(employee_initEmployees(arrayEmployees, EMPLOYEES_LEN)==0)
 	{
 		do
 		{
@@ -57,7 +55,6 @@ int main(void) {
 				case 1:
 					if(employee_addEmployee(arrayEmployees, EMPLOYEES_LEN) == 0)
 					{
-						addEmployeeFlag = 1;
 						printf("\nEmpleado ingresado exitosamente!\n");
 					}
 					else
@@ -66,7 +63,7 @@ int main(void) {
 					}
 				break;
 				case 2:
-					if(addEmployeeFlag == 1 && modifyEmployee(arrayEmployees, EMPLOYEES_LEN) == 0)
+					if(employee_modifyEmployee(arrayEmployees, EMPLOYEES_LEN) == 0)
 					{
 						printf("\nModificacion exitosa");
 					}
@@ -76,7 +73,7 @@ int main(void) {
 					}
 				break;
 				case 3:
-					if(addEmployeeFlag == 1 && removeEmployee(arrayEmployees, EMPLOYEES_LEN) == 0 )
+					if(employee_removeEmployee(arrayEmployees, EMPLOYEES_LEN) == 0 )
 					{
 						printf("Empleado eliminado exitosamente!");
 					}
@@ -86,7 +83,7 @@ int main(void) {
 					}
 				break;
 				case 4:
-					if(addEmployeeFlag == 1 && employee_report(arrayEmployees, EMPLOYEES_LEN) == 0)
+					if(employee_report(arrayEmployees, EMPLOYEES_LEN) == 0)
 					{
 						printf("\nFin del reporte");
 					}
