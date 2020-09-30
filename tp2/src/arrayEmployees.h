@@ -18,7 +18,7 @@ typedef struct
 	int isEmpty;
 }Employee;
 
-int employee_initEmployees(Employee* list, int len);
+int initEmployees(Employee* list, int len);
 int employee_addEmployee(Employee *pArrayEmployee, int len);
 int employee_modifyEmployee(Employee *pArrayEmployees, int len);
 int employee_removeEmployee(Employee *list, int len);

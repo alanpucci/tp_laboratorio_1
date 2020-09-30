@@ -22,10 +22,23 @@ static int isFloat(char string[]);
 //NUEVO SCANF. SCANF NO SE USA MAS
 static int myGets(char cadena[], int longitud)
 {
+	/*
 	fflush(stdin);
 	fgets (cadena, longitud, stdin);
 	cadena[strlen (cadena) - 1] = '\0';
 	return 0;
+	*/
+	int retorno=-1;
+	if(cadena != NULL && longitud >0 && fgets(cadena,longitud,stdin)==cadena)
+	{
+		fflush(stdin);
+		if(cadena[strlen(cadena)-1] == '\n' && cadena[0] != '\n')
+		{
+		cadena[strlen(cadena)-1] = '\0';
+		}
+		retorno=0;
+	}
+	return retorno;
 }
 
 static int isString(char string[])

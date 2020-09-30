@@ -9,12 +9,12 @@
 static int idGenerate(void);
 static int employee_searchEmpty(Employee pArrayEmployees[], int limit);
 static int addEmployee(Employee* list, int len, int id, char name[],char lastName[],float salary,int sector);
-static int findEmployeeById(Employee *list, int len, int id, int *pIndex);
+static int findEmployeeById(Employee *list, int len, int id);
 static int employee_print(Employee* pArrayEmployees, int len);
 static int sortEmployees(Employee *list, int len, int order);
 static int salaryTotal(Employee *list, int len, float *pSalaryTotal, float *pAverage);
 static int surpassAverage(Employee *list, int len, int averageSalary, int *pResult);
-static int capitalizeStrings(char *name, char *lastName);
+static int capitalizeStrings(char *string);
 static int searchForEmpty(Employee *list, int len);
 static int removeEmployee(Employee* list, int len, int id);
 
@@ -61,7 +61,8 @@ static int addEmployee(Employee* list, int len, int id, char name[],char lastNam
 	int index = employee_searchEmpty(list, len);
 	strncpy(list[index].name, name, NAME_SIZE);
 	strncpy(list[index].lastName, lastName, NAME_SIZE);
-	capitalizeStrings(list[index].name, list[index].lastName);
+	capitalizeStrings(list[index].name);
+	capitalizeStrings(list[index].lastName);
 	list[index].id = id;
 	list[index].salary = salary;
 	list[index].sector = sector;
@@ -84,14 +85,14 @@ int employee_modifyEmployee(Employee *pArrayEmployee, int len)
 	int choosenOption;
 	if(pArrayEmployee != NULL && len > 0 && searchForEmpty(pArrayEmployee, len) == 0)
 	{
-		if(utn_getInt("\nIngrese el id del empleado a modificar: ", "\nError! Ingrese un ID valido: ", &id, 2, 0, 999) == 0 &&
-		   findEmployeeById(pArrayEmployee, len, id, &index) == 0 && pArrayEmployee[index].isEmpty == FALSE)
+		if(utn_getInt("\nIngrese el id del empleado a modificar: ", "\nError! Ingrese un ID valido: ", &id, 2, 0, 999) == 0)
 		{
+			index = findEmployeeById(pArrayEmployee, len, id);
 			printf("\nEmpleado encontrado!\nNombre: %s, Apellido: %s, Salario: %.2f, Sector: %d",
 					pArrayEmployee[index].name, pArrayEmployee[index].lastName, pArrayEmployee[index].salary, pArrayEmployee[index].sector);
 			do
 			{
-				if(utn_getInt("\nQue campo desea modificar?\n1)Nombre\n2)Apellido\n3)Salario\n4)Sector\n5)Volver atras ",
+				if(pArrayEmployee[index].isEmpty == FALSE && utn_getInt("\nQue campo desea modificar?\n1)Nombre\n2)Apellido\n3)Salario\n4)Sector\n5)Volver atras ",
 						"\nERROR! Elija una opcion valida",	&choosenOption, 2, 1, 5) == 0)
 				{
 					switch(choosenOption)
@@ -167,18 +168,8 @@ int employee_removeEmployee(Employee *list, int len)
 {
 	int retornar = -1;
 	int id;
-	//int index;
 	if(list != NULL && len > 0 && searchForEmpty(list, len) == 0)
 	{
-		/*
-		if(utn_getInt("\nIngrese el id del empleado a eliminar: ", "\nError! Ingrese un ID valido: ", &id, 2, 1, 999) == 0 &&
-			findEmployeeById(list, len, id, &index) == 0 && list[index].isEmpty == FALSE)
-		{
-			printf("Empleado encontrado! Procesando eliminacion...");
-			list[index].isEmpty = TRUE;
-			return 0;
-		}
-		*/
 		if(utn_getInt("\nIngrese el id del empleado a eliminar: ", "\nError! Ingrese un ID valido: ", &id, 2, 1, 999) == 0)
 		{
 			if(removeEmployee(list, len, id) == 0)
@@ -190,19 +181,25 @@ int employee_removeEmployee(Employee *list, int len)
 	}
 	return retornar;
 }
-
+/**
+ * \brief Remove a Employee by Id (put isEmpty Flag in 1)
+ * \param Employee *pArrayEmployee: Pointer to an Employee array
+ * \param int len: Length of the array
+ * \param int id: receive an id
+ * \return int Return (-1) if Error [Invalid length or NULL pointer or if can't find a employee] - (0) if Ok
+ *
+ */
 static int removeEmployee(Employee* list, int len, int id)
 {
 	int retornar = -1;
+	int index;
 	if(list != NULL && len > 0)
 	{
-		for(int i=0; i<len; i++)
+		index = findEmployeeById(list, len, id);
+		if(list[index].isEmpty == FALSE)
 		{
-			if(list[i].id == id && list[i].isEmpty == FALSE)
-			{
-				list[i].isEmpty = TRUE;
-				return 0;
-			}
+			list[index].isEmpty = TRUE;
+			retornar = 0;
 		}
 	}
 	return retornar;
@@ -289,145 +286,51 @@ static int searchForEmpty(Employee *list, int len)
 	return retornar;
 }
 
-/*
+/**
+ * \brief Function to sort the list of employees by ascendent (0) or descendent(1)
+ * \param Employee *list: Pointer the an Employee array
+ * \param int len: Length of the array
+ * \param int order: Number we receive to determine if the list is going to sort ascendent or descendent
+ * \return (-1) if something went wrong, (0) if everything is OK
+ */
 static int sortEmployees(Employee *list, int len, int order)
 {
 	int retornar = -1;
 	Employee auxSwap;
-	int flagSectorSwap = 1;
-	int flagLastNameSwap = 1;
+	int flagSwap;
 	if(list != NULL && len > 0 && (order == 1 || order == 0))
 	{
-		if(order == 1)
+		do
 		{
-			while(flagSectorSwap == 1)
-			{
-				flagSectorSwap = 0;
-				for(int i=0; i<len-1;i++)
-				{
-					if(list[i].sector > list[i+1].sector)
-					{
-						auxSwap = list[i];
-						list[i] = list[i+1];
-						list[i+1] = auxSwap;
-						flagSectorSwap = 1;
-						while(flagLastNameSwap == 1)
-						{
-							flagLastNameSwap = 0;
-							for(int i=0; i<len-1;i++)
-							{
-								if(strcmp(list[i].lastName, list[i+1].lastName) > 0)
-								{
-									auxSwap = list[i];
-									list[i] = list[i+1];
-									list[i+1] = auxSwap;
-									flagLastNameSwap = 1;
-								}
-							}
-						}
-					}
-				}
-			}
-			retornar = 0;
-		}
-		else
-		{
-			while(flagSectorSwap == 1)
-			{
-				flagSectorSwap = 0;
-				for(int i=0; i<len-1;i++)
-				{
-					if(list[i].sector < list[i+1].sector)
-					{
-						auxSwap = list[i];
-						list[i] = list[i+1];
-						list[i+1] = auxSwap;
-						flagSectorSwap = 1;
-						while(flagLastNameSwap == 1)
-						{
-							flagLastNameSwap = 0;
-							for(int i=0; i<len-1;i++)
-							{
-								if(strcmp(list[i].lastName, list[i+1].lastName) < 0)
-								{
-									auxSwap = list[i];
-									list[i] = list[i+1];
-									list[i+1] = auxSwap;
-									flagLastNameSwap = 1;
-								}
-							}
-						}
-					}
-				}
-			}
-			retornar = 0;
-		}
-	}
-	return retornar;
-}
-*/
-
-static int sortEmployees(Employee *list, int len, int order)
-{
-	int retornar = -1;
-	Employee auxSwap;
-	int flagSectorSwap = 1;
-	if(list != NULL && len > 0 && (order == 1 || order == 0))
-	{
-		while(flagSectorSwap == 1 && order == 1)
-		{
-			flagSectorSwap = 0;
+			flagSwap = 0;
 			for(int i=0; i<len-1; i++)
 			{
-				if(list[i].sector > list[i+1].sector)
+				if( (order == 1 && ( (strncmp(list[i].lastName, list[i+1].lastName, NAME_SIZE) > 0) ||
+					(strncmp(list[i].lastName, list[i+1].lastName, NAME_SIZE) == 0 && list[i].sector > list[i+1].sector)))
+						||
+					(order == 0 && ( (strncmp(list[i].lastName, list[i+1].lastName, NAME_SIZE) < 0) ||
+					(strncmp(list[i].lastName, list[i+1].lastName, NAME_SIZE) == 0 && list[i].sector < list[i+1].sector))))
 				{
 					auxSwap = list[i];
 					list[i] = list[i+1];
-					list[i+1]= auxSwap;
-					flagSectorSwap = 1;
-				}
-				else
-				{
-					if(list[i].sector == list[i+1].sector && strncmp(list[i].lastName, list[i+1].lastName, NAME_SIZE) > 0)
-					{
-						auxSwap = list[i];
-						list[i] = list[i+1];
-						list[i+1]= auxSwap;
-						flagSectorSwap = 1;
-					}
+					list[i+1] = auxSwap;
+					flagSwap = 1;
+					retornar = 0;
 				}
 			}
-			retornar = 0;
-		}
-		while(flagSectorSwap == 1 && order == 0)
-		{
-			flagSectorSwap = 0;
-			for(int i=0; i<len-1; i++)
-			{
-				if(list[i].sector < list[i+1].sector)
-				{
-					auxSwap = list[i];
-					list[i] = list[i+1];
-					list[i+1]= auxSwap;
-					flagSectorSwap = 1;
-				}
-				else
-				{
-					if(list[i].sector == list[i+1].sector && strncmp(list[i].lastName, list[i+1].lastName, NAME_SIZE) < 0)
-					{
-						auxSwap = list[i];
-						list[i] = list[i+1];
-						list[i+1]= auxSwap;
-						flagSectorSwap = 1;
-					}
-				}
-			}
-			retornar = 0;
-		}
+		}while(flagSwap);
 	}
 	return retornar;
 }
 
+/**
+ * \brief Function to calculate the salary's accumulated of all employees and the average
+ * \param Employee *list: Pointer to an Employee array
+ * \param int len: Length of the array
+ * \param float *pSalaryTotal: Pointer of the salary's total accumulated of all employees
+ * \param float *pAverage: Pointer of the salary average
+ * \return (-1) if something went wrong, (0) if everything is OK
+ */
 static int salaryTotal(Employee *list, int len, float *pSalaryTotal, float *pAverage)
 {
 	int retornar = -1;
@@ -450,6 +353,15 @@ static int salaryTotal(Employee *list, int len, float *pSalaryTotal, float *pAve
 	return retornar;
 }
 
+
+/**
+ * \brief Function to calculate how many employees surpass the salary average
+ * \param Employee *list: Pointer to an Employee array
+ * \param int len: Length of the array
+ * \param int averageSalary: receive the salary average
+ * \param int *pResult: Pointer of the result of how many employees surpass the average
+ *\return (-1) if something went wrong, (0) if everything is OK
+ */
 static int surpassAverage(Employee *list, int len, int averageSalary, int *pResult)
 {
 	int retornar = -1;
@@ -470,12 +382,12 @@ static int surpassAverage(Employee *list, int len, int averageSalary, int *pResu
 }
 
 /**
- * \brief Inicializa el array de empleados
- * \param Employee* list, Es el puntero al array de empleados
- * \param int len, es el limite de array
- * \return (-1) Error / (0) Ok
+ * \brief Function to init isEmpty to TRUE of an Employee array
+ * \param Employee *list: Pointer to an Employee array
+ * \param int len: Length of the array
+ * \return (-1) if something went wrong, (0) if everything is OK
  */
-int employee_initEmployees(Employee* list, int len)
+int initEmployees(Employee* list, int len)
 {
 	int retornar = -1;
 	if(list != NULL && len > 0)
@@ -490,12 +402,18 @@ int employee_initEmployees(Employee* list, int len)
 	return retornar;
 }
 
-static int employee_searchEmpty(Employee pArrayEmployees[], int limit)
+/**
+ * \brief Function that returns the first index found on an Employee array that is empty
+ * \param Employee *list: Pointer to an Employee array
+ * \param int len: Length of the array
+ * \return the index of an empty employee or (-1) if something went wrong
+ */
+static int employee_searchEmpty(Employee *pArrayEmployees, int len)
 {
 	int retornar = -1;
 	if(pArrayEmployees != NULL)
 	{
-		for(int i = 0; i < limit; i++)
+		for(int i = 0; i < len; i++)
 		{
 			if(pArrayEmployees[i].isEmpty == TRUE && pArrayEmployees[i].id == -1)
 			{
@@ -507,6 +425,10 @@ static int employee_searchEmpty(Employee pArrayEmployees[], int limit)
 	return retornar;
 }
 
+/**
+ * \brief Function to auto-generate an ID
+ * \return the id
+ */
 static int idGenerate(void)
 {
 	static int id=0;
@@ -514,7 +436,14 @@ static int idGenerate(void)
 	return id;
 }
 
-static int findEmployeeById(Employee *list, int len, int id, int *pIndex)
+/**
+ * \brief Function to find an employee index receiving an id
+ * \param Employee *list: Pointer to an Employee array
+ * \param int len: Length of the array
+ * \param int id: receive the id to be searched
+ * \return the index or (-1) if something went wrong
+ */
+static int findEmployeeById(Employee *list, int len, int id)
 {
 	int retornar = -1;
 	if(list != NULL && len > 0 && id > 0)
@@ -523,8 +452,7 @@ static int findEmployeeById(Employee *list, int len, int id, int *pIndex)
 		{
 			if(list[i].id == id && list[i].isEmpty == FALSE)
 			{
-				*pIndex = i;
-				retornar = 0;
+				retornar = i;
 				break;
 			}
 		}
@@ -532,22 +460,21 @@ static int findEmployeeById(Employee *list, int len, int id, int *pIndex)
 	return retornar;
 }
 
-static int capitalizeStrings(char *name, char *lastName)
+/**
+ * \brief Function to converts an string to lowercase and it first letter to uppercase
+ * \param char *string: receive an string, preferents a name
+ */
+static int capitalizeStrings(char *string)
 {
 	int retornar = -1;
 	char bufferName[NAME_SIZE];
-	char bufferLastName[NAME_SIZE];
-	strncpy(bufferName, name, NAME_SIZE);
-	strncpy(bufferLastName, lastName, NAME_SIZE);
+	strncpy(bufferName, string, NAME_SIZE);
 	bufferName[0] = toupper(bufferName[0]);
-	bufferLastName[0] = toupper(bufferLastName[0]);
 	for(int i=1;i<NAME_SIZE;i++)
 	{
 		bufferName[i] = tolower(bufferName[i]);
-		bufferLastName[i] = tolower(bufferLastName[i]);
 	}
-	strncpy(name, bufferName, NAME_SIZE);
-	strncpy(lastName, bufferLastName, NAME_SIZE);
+	strncpy(string, bufferName, NAME_SIZE);
 	retornar = 0;
 	return retornar;
 }
