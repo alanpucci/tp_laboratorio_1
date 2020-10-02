@@ -176,13 +176,14 @@ int employee_removeEmployee(Employee *list, int len)
 	if(list != NULL && len > 0 && searchForEmpty(list, len) == 0)
 	{
 		employee_print(list, len);
-		if(utn_getInt("\nIngrese el id del empleado a eliminar: ", "\nError! Ingrese un ID valido: ", &id, 2, 1, 999) == 0)
+		if(utn_getInt("\nIngrese el id del empleado a eliminar: ", "\nError! Ingrese un ID valido: ", &id, 2, 1, 999) == 0 && removeEmployee(list, len, id) == 0)
 		{
-			if(removeEmployee(list, len, id) == 0)
-			{
-				retornar = 0;
-				printf("\nEmpleado encontrado, Procesando eliminacion...");
-			}
+			retornar = 0;
+			printf("\nEmpleado encontrado, Procesando eliminacion...");
+		}
+		else
+		{
+			printf("\nID no encontrado! Vuelva a intentar");
 		}
 	}
 	return retornar;
