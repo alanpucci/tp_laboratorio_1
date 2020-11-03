@@ -82,7 +82,7 @@ int main()
 					}
 				break;
 				case 4:
-					if(listFlag && !controller_editEmployee(listaEmpleados))
+					if(!controller_editEmployee(listaEmpleados))
 					{
 						printf("\nEmpleado modificado exitosamente!\n");
 					}
@@ -92,7 +92,7 @@ int main()
 					}
 				break;
 				case 5:
-					if(listFlag && !controller_removeEmployee(listaEmpleados))
+					if(!controller_removeEmployee(listaEmpleados))
 					{
 						printf("\nEmpleado dado de baja correctamente\n");
 					}
@@ -102,7 +102,7 @@ int main()
 					}
 				break;
 				case 6:
-					if(listFlag && !controller_ListEmployee(listaEmpleados))
+					if(!controller_ListEmployee(listaEmpleados))
 					{
 						printf("\nFin de la impresion\n");
 					}
@@ -112,7 +112,7 @@ int main()
 					}
 				break;
 				case 7:
-					if(listFlag && !controller_sortEmployee(listaEmpleados))
+					if(!controller_sortEmployee(listaEmpleados))
 					{
 						printf("\nFin del ordenamiento");
 					}

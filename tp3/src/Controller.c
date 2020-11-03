@@ -41,7 +41,6 @@ int controller_loadFromText(char* path , LinkedList* pArrayListEmployee)
  * \param path char*: Direccion del archivo
  * \param pArrayListEmployee LinkedList*: Puntero a la LinkedList
  * \return (-1) Si algo salio mal o (0) si todo esta bien
- *
  */
 int controller_loadFromBinary(char* path , LinkedList* pArrayListEmployee)
 {
@@ -97,7 +96,7 @@ int controller_addEmployee(LinkedList* pArrayListEmployee)
 	Employee* bufferEmp;
 	if(pArrayListEmployee!=NULL)
 	{
-		if(	!utn_getString("\nIngrese el nombre del nuevo empleado: ", "\nERROR! No ingreso un nombre valido", bufferName, 2, BUFFER_SIZE) &&
+		if(	!utn_getString("Ingrese el nombre del nuevo empleado: ", "\nERROR! No ingreso un nombre valido", bufferName, 2, BUFFER_SIZE) &&
 			!utn_getInt("\nIngrese las horas trabajadas del empleado: ", "\nERROR! No ingreso un numero valido", &bufferHours, 2, 1, 9999) &&
 			!utn_getFloat("\nIngrese el sueldo del nuevo empleado: ", "\nEROR! No ingreso un numero valido", &bufferSalary, 2, 1, 999999))
 		{
@@ -157,7 +156,7 @@ int controller_editEmployee(LinkedList* pArrayListEmployee)
 	int bufferHours;
 	float bufferSalary;
 	Employee* bufferEmp;
-	if(pArrayListEmployee!=NULL)
+	if(pArrayListEmployee!=NULL && !ll_isEmpty(pArrayListEmployee))
 	{
 		if( !utn_getInt("\nIngrese el id del empleado a dar de baja: ", "\nERROR! Ingrese un numero valido", &id, 2, 1, 99999) &&
 			!controller_findById(pArrayListEmployee, id, &index) && index>-1)
@@ -213,7 +212,7 @@ int controller_removeEmployee(LinkedList* pArrayListEmployee)
 	int index;
 	int choosenOption;
 	Employee* bufferEmp;
-	if(pArrayListEmployee!=NULL)
+	if(pArrayListEmployee!=NULL && !ll_isEmpty(pArrayListEmployee))
 	{
 		if( !utn_getInt("\nIngrese el id del empleado a dar de baja: ", "\nERROR! Ingrese un numero valido", &id, 2, 1, 99999) &&
 			!controller_findById(pArrayListEmployee, id, &index) && index>-1)
@@ -251,7 +250,7 @@ int controller_ListEmployee(LinkedList* pArrayListEmployee)
 	int retornar=-1;
 	int len = ll_len(pArrayListEmployee);
 	Employee* bufferEmp;
-	if(pArrayListEmployee!=NULL)
+	if(pArrayListEmployee!=NULL && !ll_isEmpty(pArrayListEmployee))
 	{
 		for(int i=0; i<len;i++)
 		{
@@ -272,11 +271,11 @@ int controller_sortEmployee(LinkedList* pArrayListEmployee)
 {
 	int retornar=-1;
 	int choosenOption;
-	if(pArrayListEmployee!=NULL)
+	if(pArrayListEmployee!=NULL && !ll_isEmpty(pArrayListEmployee))
 	{
 		if(!utn_getInt("\nIngrese 1 para ascendente o 0 para descendente: ", "\nERROR! Ingrese 1 o 0" , &choosenOption, 2, 0, 1))
 		{
-			ll_sort(pArrayListEmployee, employee_sort, choosenOption);
+			ll_sort(pArrayListEmployee, employee_sortByName, choosenOption);
 			retornar=0;
 		}
 	}
@@ -305,6 +304,7 @@ int controller_saveAsText(char* path , LinkedList* pArrayListEmployee)
 		pFile = fopen(path, "w");
 		if(pFile!=NULL)
 		{
+			ll_sort(pArrayListEmployee, employee_sortById, 1);
 			fprintf(pFile, "id,nombre,horasTrabajadas,sueldo\n");
 			for(int i=0;i<len;i++)
 			{
@@ -346,6 +346,7 @@ int controller_saveAsBinary(char* path , LinkedList* pArrayListEmployee)
 		pFile = fopen(path, "wb");
 		if(pFile!=NULL)
 		{
+			ll_sort(pArrayListEmployee, employee_sortById, 1);
 			for(int i=0;i<len;i++)
 			{
 				bufferEmp = ll_get(pArrayListEmployee, i);

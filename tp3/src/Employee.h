@@ -30,5 +30,6 @@ int employee_setSueldoTxt(Employee* this, char* sueldo);
 int employee_getSueldo(Employee* this,float* sueldo);
 
 int employee_print(Employee* this);
-int employee_sort(void* employee1, void* employee2);
+int employee_sortByName(void* employee1, void* employee2);
+int employee_sortById(void* employee1, void* employee2);
 #endif // employee_H_INCLUDED

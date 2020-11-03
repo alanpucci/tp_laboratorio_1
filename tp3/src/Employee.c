@@ -268,7 +268,7 @@ static int isValidInt(char string[])
 	return retornar;
 }
 
-int employee_sort(void* employee1, void* employee2)
+int employee_sortByName(void* employee1, void* employee2)
 {
 	Employee* bufferFirstEmp = employee1;
 	Employee* bufferSecondEmp = employee2;
@@ -283,6 +283,31 @@ int employee_sort(void* employee1, void* employee2)
 	else
 	{
 		if(strncmp(bufferName1,bufferName2,NAME_SIZE)<0)
+		{
+			return -1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+}
+
+int employee_sortById(void* employee1, void* employee2)
+{
+	Employee* bufferFirstEmp = employee1;
+	Employee* bufferSecondEmp = employee2;
+	int bufferId1;
+	int bufferId2;
+	employee_getId(bufferFirstEmp, &bufferId1);
+	employee_getId(bufferSecondEmp, &bufferId2);
+	if(bufferId1>bufferId2)
+	{
+		return 1;
+	}
+	else
+	{
+		if(bufferId1<bufferId2)
 		{
 			return -1;
 		}
