@@ -4,6 +4,7 @@
 #include "Controller.h"
 #include "Employee.h"
 #include "menu.h"
+#include "utn.h"
 
 /****************************************************
     Menu:
@@ -22,27 +23,52 @@
 int main()
 {
 	setbuf(stdout,NULL);
+    int menuOption;
     int option;
     int listFlag=0;
 
     LinkedList* listaEmpleados = ll_newLinkedList();
     do{
-    	if(utn_getMenu(&option, 2, 1, 10)==0)
+    	if(utn_getMenu(&menuOption, 2, 1, 10)==0)
     	{
-			switch(option)
+			switch(menuOption)
 			{
 				case 1:
-					if(!controller_loadFromText("data.csv",listaEmpleados))
+					if(listFlag== 0 && !controller_loadFromText("data.csv",listaEmpleados))
 					{
 						printf("\nEmpleados cargados correctamente\n");
 						listFlag=1;
 					}
+					else
+					{
+						if( !utn_getInt("\nYa hay una lista cargada, desea reemplazarla?: Presione 1 para aceptar o 2 para cancelar", "\nERROR!", &option, 2, 1, 2) &&
+							option==1 && !controller_loadFromText("data.csv", listaEmpleados))
+						{
+							printf("\nEmpleados cargados correctamente\n");
+						}
+						else
+						{
+							printf("\nNo se cargaron los empleados\n");
+						}
+					}
 				break;
 				case 2:
-					if(!controller_loadFromBinary("dataBin.csv", listaEmpleados))
+					if(listFlag==0 && !controller_loadFromBinary("dataBin.csv", listaEmpleados))
 					{
 						printf("\nEmpleados cargados correctamente\n");
 						listFlag=1;
+					}
+					else
+					{
+						if( !utn_getInt("\nYa hay una lista cargada, desea reemplazarla?: Presione 1 para aceptar o 2 para cancelar", "\nERROR!", &option, 2, 1, 2) &&
+							option==1 && !controller_loadFromBinary("dataBin.csv", listaEmpleados))
+						{
+							printf("\nEmpleados cargados correctamente\n");
+						}
+						else
+						{
+							printf("\nNo se cargaron los empleados\n");
+						}
 					}
 				break;
 				case 3:
@@ -117,7 +143,7 @@ int main()
 				break;
 			}
     	}
-    }while(option != 10);
+    }while(menuOption != 10);
     printf("Adios!");
     return 0;
 }

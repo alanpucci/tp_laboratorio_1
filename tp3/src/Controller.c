@@ -12,9 +12,9 @@ static int capitalizeStrings(char *string);
 
 /** \brief Carga los datos de los empleados desde el archivo data.csv (modo texto).
  *
- * \param path char*
- * \param pArrayListEmployee LinkedList*
- * \return int
+ * \param path char*: Direccion del archivo
+ * \param pArrayListEmployee LinkedList*: Puntero a la LinkedList
+ * \return (-1) Si algo salio mal o (0) si todo esta bien
  *
  */
 int controller_loadFromText(char* path , LinkedList* pArrayListEmployee)
@@ -38,9 +38,9 @@ int controller_loadFromText(char* path , LinkedList* pArrayListEmployee)
 
 /** \brief Carga los datos de los empleados desde el archivo data.csv (modo binario).
  *
- * \param path char*
- * \param pArrayListEmployee LinkedList*
- * \return int
+ * \param path char*: Direccion del archivo
+ * \param pArrayListEmployee LinkedList*: Puntero a la LinkedList
+ * \return (-1) Si algo salio mal o (0) si todo esta bien
  *
  */
 int controller_loadFromBinary(char* path , LinkedList* pArrayListEmployee)
@@ -83,9 +83,8 @@ int controller_searchMaxId(LinkedList* pArrayListEmployee)
 
 /** \brief Alta de empleados
  *
- * \param path char*
- * \param pArrayListEmployee LinkedList*
- * \return int
+ * \param pArrayListEmployee LinkedList*: Puntero a la LinkedList
+ * \return (-1) Si algo salio mal o (0) si todo esta bien
  *
  */
 int controller_addEmployee(LinkedList* pArrayListEmployee)
@@ -113,6 +112,14 @@ int controller_addEmployee(LinkedList* pArrayListEmployee)
     return retornar;;
 }
 
+/** \brief Buscar empleado por ID
+ *
+ * \param pArrayListEmployee LinkedList*: Puntero a la LinkedList
+ * \param int id: Recibimos el ID a buscar
+ * \param int* index: Devolvemos por referencia el indice del empleado encontrado
+ * \return (-1) Si algo salio mal o (0) si todo esta bien
+ *
+ */
 int controller_findById(LinkedList* pArrayListEmployee, int id, int* index)
 {
 	int retornar=-1;
@@ -135,12 +142,10 @@ int controller_findById(LinkedList* pArrayListEmployee, int id, int* index)
 	return retornar;
 }
 
-/** \brief Modificar datos de empleado
+/** \brief Modificar datos de empleado buscado por ID
  *
- * \param path char*
- * \param pArrayListEmployee LinkedList*
- * \return int
- *
+ * \param pArrayListEmployee LinkedList*: Puntero a la linked list
+ * \return (-1) Si algo salio mal o (0) si todo esta bien
  */
 int controller_editEmployee(LinkedList* pArrayListEmployee)
 {
@@ -196,12 +201,10 @@ int controller_editEmployee(LinkedList* pArrayListEmployee)
     return retornar;
 }
 
-/** \brief Baja de empleado
+/** \brief Baja de empleado por ID
  *
- * \param path char*
- * \param pArrayListEmployee LinkedList*
- * \return int
- *
+ * \param pArrayListEmployee LinkedList*: Puntero a la LinkedList
+ * \return (-1) Si algo salio mal o (0) si todo esta bien
  */
 int controller_removeEmployee(LinkedList* pArrayListEmployee)
 {
@@ -237,11 +240,10 @@ int controller_removeEmployee(LinkedList* pArrayListEmployee)
     return retornar;
 }
 
-/** \brief Listar empleados
+/** \brief Imprime todos los empleados
  *
- * \param path char*
- * \param pArrayListEmployee LinkedList*
- * \return int
+ * \param pArrayListEmployee LinkedList*: Puntero a la LinkedList
+ * \return (-1) Si algo salio mal o (0) si todo esta bien
  *
  */
 int controller_ListEmployee(LinkedList* pArrayListEmployee)
@@ -249,60 +251,43 @@ int controller_ListEmployee(LinkedList* pArrayListEmployee)
 	int retornar=-1;
 	int len = ll_len(pArrayListEmployee);
 	Employee* bufferEmp;
-	char bufferName[BUFFER_SIZE];
-	int bufferId;
-	int bufferHours;
-	float bufferSalary;
 	if(pArrayListEmployee!=NULL)
 	{
 		for(int i=0; i<len;i++)
 		{
 			bufferEmp = ll_get(pArrayListEmployee, i);
-			if(	!employee_getNombre(bufferEmp, bufferName) &&
-				!employee_getId(bufferEmp, &bufferId) &&
-				!employee_getHorasTrabajadas(bufferEmp, &bufferHours) &&
-				!employee_getSueldo(bufferEmp, &bufferSalary))
-			{
-				printf("ID: %d - Nombre: %s - Horas trabajadas: %d - Sueldo: %.2f\n", bufferId, bufferName, bufferHours, bufferSalary);
-				retornar=0;
-			}
+			employee_print(bufferEmp);
+			retornar=0;
 		}
 	}
     return retornar;
 }
 
-/** \brief Ordenar empleados
+/** \brief Ordenar empleados por nombre, 1 ascendente o 0 descendente
  *
- * \param path char*
- * \param pArrayListEmployee LinkedList*
- * \return int
+ * \param pArrayListEmployee LinkedList*: Puntero a la LinkedList
+ * \return (-1) Si algo salio mal o (0) si todo esta bien
  */
 int controller_sortEmployee(LinkedList* pArrayListEmployee)
 {
 	int retornar=-1;
-	int len = ll_len(pArrayListEmployee);
-	Employee* bufferFirstEmp;
-	Employee* bufferSecondEmp;
-	int r;
+	int choosenOption;
 	if(pArrayListEmployee!=NULL)
 	{
-		for(int i=0;i<len-1;i++)
+		if(!utn_getInt("\nIngrese 1 para ascendente o 0 para descendente: ", "\nERROR! Ingrese 1 o 0" , &choosenOption, 2, 0, 1))
 		{
-			bufferFirstEmp = ll_get(pArrayListEmployee, i);
-			bufferSecondEmp = ll_get(pArrayListEmployee, i+1);
-			r =	ll_sort(pArrayListEmployee, employee_sort, 1);
-			printf("%d",r);
+			ll_sort(pArrayListEmployee, employee_sort, choosenOption);
+			retornar=0;
 		}
-		retornar=0;
 	}
 	return retornar;
 }
 
 /** \brief Guarda los datos de los empleados en el archivo data.csv (modo texto).
  *
- * \param path char*
- * \param pArrayListEmployee LinkedList*
- * \return int
+ * \param path char*: Direccion del archivo
+ * \param pArrayListEmployee LinkedList*: Puntero a la LinkedList
+ * \return (-1) Si algo salio mal o (0) si todo esta bien
  *
  */
 int controller_saveAsText(char* path , LinkedList* pArrayListEmployee)
@@ -320,6 +305,7 @@ int controller_saveAsText(char* path , LinkedList* pArrayListEmployee)
 		pFile = fopen(path, "w");
 		if(pFile!=NULL)
 		{
+			fprintf(pFile, "id,nombre,horasTrabajadas,sueldo\n");
 			for(int i=0;i<len;i++)
 			{
 				bufferEmp = ll_get(pArrayListEmployee, i);
@@ -340,9 +326,9 @@ int controller_saveAsText(char* path , LinkedList* pArrayListEmployee)
 
 /** \brief Guarda los datos de los empleados en el archivo data.csv (modo binario).
  *
- * \param path char*
- * \param pArrayListEmployee LinkedList*
- * \return int
+ * \param path char*: Direccion del archivo
+ * \param pArrayListEmployee LinkedList*: Puntero a la LinkedList
+ * \return (-1) Si algo salio mal o (0) si todo esta bien
  *
  */
 int controller_saveAsBinary(char* path , LinkedList* pArrayListEmployee)
@@ -382,6 +368,12 @@ int controller_saveAsBinary(char* path , LinkedList* pArrayListEmployee)
 	return retornar;
 }
 
+/** \brief Pone letra Capital a un string que recibe, el resto de caracteres en minuscula
+ *
+ * \param char *string: Cadena de caracteres a capitalizar
+ * \return (-1) Si algo salio mal o (0) si todo esta bien
+ *
+ */
 static int capitalizeStrings(char *string)
 {
 	int retornar = -1;
@@ -396,3 +388,4 @@ static int capitalizeStrings(char *string)
 	retornar = 0;
 	return retornar;
 }
+

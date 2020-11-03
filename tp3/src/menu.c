@@ -3,6 +3,15 @@
 #include "utn.h"
 #define ARRAY_SIZE 4096
 
+/** \brief Imprime el menu y devuelve por referencia la opcion elegida
+ *
+ * \param int *pResult: Pasaje por referencia de la opcion elegida
+ * \param int attemps: Numero de reintentos posibles
+ * \param int min: Numero minime permitido
+ * \param int max: Numero maximo permitido
+ * \return (-1) Si algo salio mal o (0) si todo esta bien
+ *
+ */
 int utn_getMenu(int *pResult, int attemps, int min, int max)
 {
 	int retorno = -1;

@@ -193,7 +193,7 @@ int employee_print(Employee* this)
 			!employee_getHorasTrabajadas(this, &bufferHours) &&
 			!employee_getSueldo(this, &bufferSalary))
 		{
-			printf("\nID: %d - Nombre: %s - Horas trabajadas: %d - Sueldo: %.2f\n", bufferId, bufferName, bufferHours, bufferSalary);
+			printf("\nID: %d - Nombre: %s - Horas trabajadas: %d - Sueldo: %.2f", bufferId, bufferName, bufferHours, bufferSalary);
 			retornar = 0;
 		}
 	}
@@ -270,8 +270,8 @@ static int isValidInt(char string[])
 
 int employee_sort(void* employee1, void* employee2)
 {
-	Employee* bufferFirstEmp = (Employee*) employee1;
-	Employee* bufferSecondEmp = (Employee*) employee2;
+	Employee* bufferFirstEmp = employee1;
+	Employee* bufferSecondEmp = employee2;
 	char bufferName1[BUFFER_SIZE];
 	char bufferName2[BUFFER_SIZE];
 	employee_getNombre(bufferFirstEmp, bufferName1);

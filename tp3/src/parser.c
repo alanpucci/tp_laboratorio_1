@@ -6,9 +6,9 @@
 
 /** \brief Parsea los datos los datos de los empleados desde el archivo data.csv (modo texto).
  *
- * \param path char*
- * \param pArrayListEmployee LinkedList*
- * \return int
+ * \param path char*: Direccion del archivo
+ * \param pArrayListEmployee LinkedList*: Puntero a la LinkedList
+ * \return (-1) Si algo salio mal o (0) si todo esta bien
  *
  */
 int parser_EmployeeFromText(FILE* pFile , LinkedList* pArrayListEmployee)
@@ -21,6 +21,7 @@ int parser_EmployeeFromText(FILE* pFile , LinkedList* pArrayListEmployee)
 	Employee* bufferEmp;
 	if(pFile!=NULL && pArrayListEmployee!=NULL)
 	{
+		ll_clear(pArrayListEmployee);
 		do
 		{
 			if(fscanf(pFile, "%[^,],%[^,],%[^,],%[^\n]\n",bufferId,bufferName,bufferHours,bufferSalary)==4)
@@ -31,15 +32,16 @@ int parser_EmployeeFromText(FILE* pFile , LinkedList* pArrayListEmployee)
 			}
 		}while(feof(pFile)==0);
 		fclose(pFile);
+		//retornar = atoi(bufferId);
 	}
     return retornar;
 }
 
 /** \brief Parsea los datos los datos de los empleados desde el archivo data.csv (modo binario).
  *
- * \param path char*
- * \param pArrayListEmployee LinkedList*
- * \return int
+ * \param path char*: Direccion del archivo
+ * \param pArrayListEmployee LinkedList*: Puntero a la LinkedList
+ * \return (-1) Si algo salio mal o (0) si todo esta bien
  *
  */
 int parser_EmployeeFromBinary(FILE* pFile , LinkedList* pArrayListEmployee)
@@ -53,6 +55,7 @@ int parser_EmployeeFromBinary(FILE* pFile , LinkedList* pArrayListEmployee)
 	Employee* bufferEmp;
 	if(pFile!=NULL && pArrayListEmployee!=NULL)
 	{
+		ll_clear(pArrayListEmployee);
 		do
 		{
 			if( fread(&id, sizeof(int),1,pFile)==1 && fread(name, NAME_SIZE, 1, pFile)==1 &&
