@@ -4,6 +4,12 @@
 #define ARRAY_SIZE 4096
 #define LONG_NOMBRE 50
 
+/**
+ * \brief Funcion para obtener un string
+ * \param char cadena[]: Donde se va a guardar el string
+ * \param int longitud: El tamaño del array de caracteres para no sobrepasarlo
+ * \return (-1) si algo salio mal (0) si todo esta OK
+ */
 int myGets(char cadena[], int longitud)
 {
 	int retorno=-1;
@@ -19,6 +25,11 @@ int myGets(char cadena[], int longitud)
 	return retorno;
 }
 
+/**
+ * \brief Funcion para validar si el array de caracteres que recibe es una cadena de texto y no otra cosa
+ * \param char string[]: Es el string que vamos a validar
+ * \return (-1) si algo salio mal (0) si todo esta OK
+ */
 int isString(char string[])
 {
 	int retorno = 1;
@@ -36,6 +47,11 @@ int isString(char string[])
 	return retorno;
 }
 
+/**
+ * \brief Funcion para validar si la cadena de caracteres que recibimos corresponde a un float
+ * \char string[]: Es la cadena de caracteres que vamos a validar
+ * \return (-1) si algo salio mal (0) si todo esta OK
+ */
 int isFloat(char string[])
 {
 	int retorno = 1;
@@ -65,6 +81,11 @@ int isFloat(char string[])
 	return retorno;
 }
 
+/**
+ * \brief Funcion para validar si la cadena de caracteres que recibimos corresponde a un entero
+ * \char string[]: Es la cadena de caracteres que vamos a validar
+ * \return (-1) si algo salio mal (0) si todo esta OK
+ */
 int isInt(char string[])
 {
 	int retorno = 1;
@@ -88,6 +109,15 @@ int isInt(char string[])
 	return retorno;
 }
 
+/**
+ * \brief Funcion para pedirle al usuario un string
+ * \param char msg[]: Puntero a una cadena de texto
+ * \param char msgError[]: Puntero a una cadena de texto en caso de error
+ * \param char pResult[]: El string que vamos a devolver
+ * \param int attemps: Reintentos que va a tener la funcion en caso de error
+ * \param int limit: Es el tamaño para no sobrepasar la cadena de texto
+ * \return (-1) si algo salio mal (0) si todo esta OK
+ */
 int utn_getString(char msg[], char msgError[], char pResult[], int attemps, int limit)
 {
 	int retorno = -1;
@@ -114,6 +144,16 @@ int utn_getString(char msg[], char msgError[], char pResult[], int attemps, int 
 	return retorno;
 }
 
+/**
+ * \brief Funcion para pedirle al usuario un numero entero
+ * \param char msg[]: Puntero a una cadena de texto
+ * \param char msgError[]: Puntero a una cadena de texto en caso de error
+ * \param int *pResult: Puntero del entero que vamos a devolver
+ * \param int attemps: Reintentos que va a tener la funcion en caso de error
+ * \param int min: Es el minimo permitido para el numero
+ * \param int max: Es el maximo permitido para el numero
+ * \return (-1) si algo salio mal (0) si todo esta OK
+ */
 int utn_getInt(char msg[], char msgError[], int *pResult, int attemps, int min, int max)
 {
 	int retorno = -1;
@@ -152,6 +192,16 @@ int utn_getInt(char msg[], char msgError[], int *pResult, int attemps, int min, 
 	return retorno;
 }
 
+/**
+ * \brief Funcion para pedirle al usuario un numero flotante
+ * \param char msg[]: Puntero a una cadena de texto
+ * \param char msgError[]: Puntero a una cadena de texto en caso de error
+ * \param float *pResult: Puntero del flotante que vamos a devolver
+ * \param int attemps: Reintentos que va a tener la funcion en caso de error
+ * \param int min: Es el minimo permitido para el numero
+ * \param int max: Es el maximo permitido para el numero
+ * \return (-1) si algo salio mal (0) si todo esta OK
+ */
 int utn_getFloat(char msg[], char msgError[], float *pResult, int attemps, int min, int max)
 {
 	int retorno = -1;

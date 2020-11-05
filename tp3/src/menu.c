@@ -24,14 +24,14 @@ int utn_getMenu(int *pResult, int attemps, int min, int max)
 		{
 			printf("\nElija una opcion: \n"
 					"1) Cargar los datos de los empleados desde 'data.csv' (modo texto)\n"
-					"2) Cargar los datos de los empleados desde 'data.csv' (modo binario)\n"
+					"2) Cargar los datos de los empleados desde 'data.bin' (modo binario)\n"
 					"3) Alta de empleado\n"
 					"4) Modificar datos de empleado\n"
 					"5) Baja de empleado\n"
 					"6) Listar empleados\n"
 					"7) Ordenar empleados\n"
 					"8) Guardar los datos de los empleados en 'data.csv' (modo texto)\n"
-					"9) Guarar los datos de los empleados en 'data.csv' (modo binario)\n"
+					"9) Guarar los datos de los empleados en 'data.bin' (modo binario)\n"
 					"10) Salir\n"
 					"> > OPCION:");
 			if(myGets(bufferString, ARRAY_SIZE) == 0 && isInt(bufferString) == 1)

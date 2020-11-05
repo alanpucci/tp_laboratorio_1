@@ -30,9 +30,11 @@ int parser_EmployeeFromText(FILE* pFile , LinkedList* pArrayListEmployee)
 				ll_add(pArrayListEmployee, bufferEmp);
 				retornar=0;
 			}
+			else
+			{
+				employee_delete(bufferEmp);
+			}
 		}while(feof(pFile)==0);
-		fclose(pFile);
-		//retornar = atoi(bufferId);
 	}
     return retornar;
 }
@@ -48,25 +50,23 @@ int parser_EmployeeFromBinary(FILE* pFile , LinkedList* pArrayListEmployee)
 {
 
 	int retornar=-1;
-	char name[NAME_SIZE];
-	int id;
-	int hours;
-	float salary;
 	Employee* bufferEmp;
 	if(pFile!=NULL && pArrayListEmployee!=NULL)
 	{
 		ll_clear(pArrayListEmployee);
 		do
 		{
-			if( fread(&id, sizeof(int),1,pFile)==1 && fread(name, NAME_SIZE, 1, pFile)==1 &&
-				fread(&hours, sizeof(int), 1, pFile)==1 && fread(&salary, sizeof(float),1,pFile))
+			bufferEmp = employee_new();
+			if( fread(bufferEmp,sizeof(Employee),1,pFile)==1 )
 			{
-				bufferEmp = employee_newParameters(id, name, hours, salary);
 				ll_add(pArrayListEmployee, bufferEmp);
 				retornar=0;
 			}
+			else
+			{
+				employee_delete(bufferEmp);
+			}
 		}while(feof(pFile)==0);
-		fclose(pFile);
 	}
 	return retornar;
 }

@@ -53,7 +53,7 @@ int main()
 					}
 				break;
 				case 2:
-					if(listFlag==0 && !controller_loadFromBinary("dataBin.csv", listaEmpleados))
+					if(listFlag==0 && !controller_loadFromBinary("data.bin", listaEmpleados))
 					{
 						printf("\nEmpleados cargados correctamente\n");
 						listFlag=1;
@@ -61,7 +61,7 @@ int main()
 					else
 					{
 						if( !utn_getInt("\nYa hay una lista cargada, desea reemplazarla?: Presione 1 para aceptar o 2 para cancelar", "\nERROR!", &option, 2, 1, 2) &&
-							option==1 && !controller_loadFromBinary("dataBin.csv", listaEmpleados))
+							option==1 && !controller_loadFromBinary("data.bin", listaEmpleados))
 						{
 							printf("\nEmpleados cargados correctamente\n");
 						}
@@ -72,9 +72,12 @@ int main()
 					}
 				break;
 				case 3:
-					if(listFlag && !controller_addEmployee(listaEmpleados))
+					if(listFlag)
 					{
+						if(!controller_addEmployee(listaEmpleados))
+						{
 						printf("\nEmpleado dado de alta correctamente!\n");
+						}
 					}
 					else
 					{
@@ -82,9 +85,12 @@ int main()
 					}
 				break;
 				case 4:
-					if(!controller_editEmployee(listaEmpleados))
+					if(!ll_isEmpty(listaEmpleados))
 					{
-						printf("\nEmpleado modificado exitosamente!\n");
+						if(!controller_editEmployee(listaEmpleados))
+						{
+							printf("\nEmpleado modificado exitosamente!\n");
+						}
 					}
 					else
 					{
@@ -92,9 +98,12 @@ int main()
 					}
 				break;
 				case 5:
-					if(!controller_removeEmployee(listaEmpleados))
+					if(!ll_isEmpty(listaEmpleados))
 					{
-						printf("\nEmpleado dado de baja correctamente\n");
+						if(!controller_removeEmployee(listaEmpleados))
+						{
+							printf("\nEmpleado dado de baja correctamente\n");
+						}
 					}
 					else
 					{
@@ -102,9 +111,12 @@ int main()
 					}
 				break;
 				case 6:
-					if(!controller_ListEmployee(listaEmpleados))
+					if(!ll_isEmpty(listaEmpleados))
 					{
-						printf("\nFin de la impresion\n");
+						if(!controller_ListEmployee(listaEmpleados))
+						{
+							printf("\nFin de la impresion\n");
+						}
 					}
 					else
 					{
@@ -112,9 +124,12 @@ int main()
 					}
 				break;
 				case 7:
-					if(!controller_sortEmployee(listaEmpleados))
+					if(!ll_isEmpty(listaEmpleados))
 					{
-						printf("\nFin del ordenamiento");
+						if(!controller_sortEmployee(listaEmpleados))
+						{
+							printf("\nFin del ordenamiento");
+						}
 					}
 					else
 					{
@@ -132,7 +147,7 @@ int main()
 					}
 				break;
 				case 9:
-					if(listFlag && !controller_saveAsBinary("dataBin.csv", listaEmpleados))
+					if(listFlag && !controller_saveAsBinary("data.bin", listaEmpleados))
 					{
 						printf("\nEmpleados guardados correctamente en el archivo (binario)\n");
 					}
