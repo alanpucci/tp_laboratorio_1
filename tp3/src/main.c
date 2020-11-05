@@ -159,6 +159,7 @@ int main()
 			}
     	}
     }while(menuOption != 10);
+    ll_deleteLinkedList(listaEmpleados);
     printf("Adios!");
     return 0;
 }
