@@ -139,7 +139,7 @@ int controller_findById(LinkedList* pArrayListEmployee, int id, int* index)
 	int len = ll_len(pArrayListEmployee);
 	int bufferId;
 	Employee* bufferEmp;
-	if(pArrayListEmployee!=NULL && id>0)
+	if(pArrayListEmployee!=NULL && id>0 && index!=NULL)
 	{
 		for(int i=0;i<len;i++)
 		{

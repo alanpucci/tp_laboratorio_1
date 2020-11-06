@@ -26,7 +26,7 @@ Employee* employee_new()
 Employee* employee_newParametros(char* idStr,char* nombreStr,char* horasTrabajadasStr, char* sueldo)
 {
 	Employee* this = employee_new();
-	if(this!=NULL)
+	if(this!=NULL && idStr!= NULL && nombreStr!=NULL && horasTrabajadasStr!=NULL && sueldo!=NULL)
 	{
 		if(  employee_setIdTxt(this, idStr)!=-1 &&
 		     employee_setNombre(this, nombreStr)!=-1 &&
@@ -50,7 +50,7 @@ Employee* employee_newParametros(char* idStr,char* nombreStr,char* horasTrabajad
 Employee* employee_newParameters(int id,char* name,int hours, float salary)
 {
 	Employee* this = employee_new();
-	if(this!=NULL)
+	if(this!=NULL && id>-1 && name!=NULL && hours>0 && salary>0)
 	{
 		if(  employee_setId(this, id)!=-1 &&
 		     employee_setNombre(this, name)!=-1 &&
@@ -246,7 +246,7 @@ int employee_setSueldoTxt(Employee* this, char* sueldo)
 {
 	int retornar=-1;
 	char bufferSueldo[BUFFER_SIZE];
-	if(this!=NULL && isValidFloat(sueldo)==1)
+	if(this!=NULL && sueldo!=NULL && isValidFloat(sueldo)==1)
 	{
 		strncpy(bufferSueldo, sueldo, BUFFER_SIZE);
 		this->sueldo = atof(bufferSueldo);
@@ -384,10 +384,10 @@ int employee_compareByName(void* employee1, void* employee2)
 	Employee* bufferSecondEmp = (Employee*) employee2;
 	char bufferName1[BUFFER_SIZE];
 	char bufferName2[BUFFER_SIZE];
-	employee_getNombre(bufferFirstEmp, bufferName1);
-	employee_getNombre(bufferSecondEmp, bufferName2);
 	if(employee1!=NULL && employee2!=NULL)
 	{
+		employee_getNombre(bufferFirstEmp, bufferName1);
+		employee_getNombre(bufferSecondEmp, bufferName2);
 		if(strncmp(bufferName1,bufferName2,NAME_SIZE)>0)
 		{
 			retornar=1;
