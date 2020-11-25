@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../inc/LinkedList.h"
+#include "LinkedList.h"
 
 
 static Node* getNode(LinkedList* this, int nodeIndex);
@@ -255,9 +255,9 @@ int ll_clear(LinkedList* this)
     	while(ll_len(this))
     	{
     		ll_remove(this, 0);
+			returnAux=0;
     	}
     	this->pFirstNode=NULL;
-    	returnAux=0;
     }
     return returnAux;
 }
